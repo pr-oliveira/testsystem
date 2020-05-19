@@ -1,0 +1,86 @@
+{%extends 'base/base-fullscreen.html'%}
+
+
+{%block title%}Login{%endblock%}
+{%block side_top_bars%}{%endblock%}
+
+{%block body_class%}login-page ls-closed{%endblock%}
+
+{%block content%}
+<div class="login-box">
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div> 
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-unlock auth-icon"></i>
+                    </div>
+
+                    <h3 class="mb-4">Login</h3>            
+
+                    <span class="mb-0 text-muted">
+                        Digite seu usuário e senha para entrar
+                        {% include 'base/form_error_msg.html' %}
+                    </span>
+
+                    <br />
+                    <br />
+
+                    
+                    {% if not request.user.is_authenticated %}
+                        <form id="login" method="POST">
+                            {% csrf_token %}
+                            <!--campos do form-->    
+                            {% for field in form %}
+                                <div class="input-group mb-4">
+                                    {{field}}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-group text-left">
+                                <div class="checkbox checkbox-fill d-inline">
+                                    <input type="checkbox" name="remember_me" id="remember_me" class="filled-in chk-col-light-blue">
+                                    <label for="remember_me">Lembrar</label>
+                                </div>
+                            </div>    
+                            <button class="btn btn-block btn-red" type="submit">ENTRAR</button>
+                        </form>
+                        <div class="msg" style="margin-top:20px;">
+                                <a href="{% url 'login:esqueceuview' %}">Esqueceu a senha?</a><br/>
+                                <small>*caso seja seu primeiro login, leia a <a href="https://github.com/thiagopena/djangoSIGE" style="font-size:inherit;">documentação</a></small>
+                        </div>
+                    {%endif%}
+
+                    {% include 'base/modal.html' %}
+                </div> 
+            </div>   
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+
+{% block js %}
+
+    <!-- Mensagem caso sucesso ao solicitar troca de senha -->
+    {% if messages %}
+
+    {%for message in messages%}
+    {% if 'success' in message.tags %}
+
+    <script type="text/javascript">
+        $.Admin.messages.msgSucesso("{{message}}");
+    </script>
+    {%endif%}
+    {%endfor%}
+
+    {% endif %}
+
+{% endblock %}
